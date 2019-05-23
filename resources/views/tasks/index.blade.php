@@ -50,17 +50,27 @@
                                 <div>{{ $task->name }}</div>
                             </td>
 
-                            <!-- Delete Button -->
                             <td>
+                                <!-- Transfer Button -->
+                                <form action="/tasks/{{ $task->id }}/transfer" method="POST">
+                                {{ csrf_field() }}
+
+                                  <button type="submit" id="transfer-task-{{ $task->id }}" class="btn btn-secondary float-right">
+                                      <i class="fa fa-btn fa-trash"></i>Transfer
+                                  </button>
+                                </form>
+
+                                <!-- Delete Button -->
                                 <form action="{{ url('tasks/'.$task->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
 
-                                  <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                                  <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger float-right" style="margin-right: 6px;">
                                       <i class="fa fa-btn fa-trash"></i>Delete
                                   </button>
                                 </form>
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>
