@@ -71,10 +71,11 @@
                 </div>
             </div>
         </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <div class="row d-flex justify-content-center">
+          <main class="py-4 col-lg-6">
+              @yield('content')
+          </main>
+        </div>
     </div>
 </body>
 </html>
