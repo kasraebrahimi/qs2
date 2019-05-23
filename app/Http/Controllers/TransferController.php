@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\User;
 
 class TransferController extends Controller
 {
@@ -12,8 +13,20 @@ class TransferController extends Controller
       $this->middleware('auth');
     }
 
-    public function index(Task $task)
+    public function create(Task $task, User $user)
     {
-      return view('transfers.index', compact('task'));
+      $users = User::all()->pluck('name', 'id')->all();
+      $tasks = auth()->user()->tasks->pluck('name', 'id')->all();
+
+      return view('transfers.create', [
+        'task' => $task,
+        'tasks' => $tasks,
+        'users' => $users
+      ]);
+    }
+
+    public function store(Request $request)
+    {
+      dd($request->all());
     }
 }

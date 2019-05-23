@@ -52,14 +52,9 @@
 
                             <td>
                                 <!-- Transfer Button -->
-                                <form action="/tasks/{{ $task->id }}/transfer" method="POST">
-                                {{ csrf_field() }}
-
-                                  <button type="submit" id="transfer-task-{{ $task->id }}" class="btn btn-secondary float-right">
+                                  <a  href="/tasks/{{ $task->id }}/transfer" id="transfer-task-{{ $task->id }}" class="btn btn-primary float-right" role="button">
                                       <i class="fa fa-btn fa-trash"></i>Transfer
-                                  </button>
-                                </form>
-
+                                  </a>
                                 <!-- Delete Button -->
                                 <form action="{{ url('tasks/'.$task->id) }}" method="POST">
                                 {{ csrf_field() }}

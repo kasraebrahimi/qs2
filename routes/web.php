@@ -21,4 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('tasks', 'TaskController');
 
-Route::get('/tasks/{task}/transfer', 'TransferController@index');
+Route::get('/tasks/{task}/transfer', 'TransferController@create');
+Route::post('/transfers', 'TransferController@store');
