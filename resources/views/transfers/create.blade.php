@@ -10,7 +10,7 @@
            @endforeach
          </select>
          <span>to</span>
-         <select name="ReceiverId"class="form-control custom-select col-lg-2" id="exampleFormControlSelect1">
+         <select name="receiverId"class="form-control custom-select col-lg-2" id="exampleFormControlSelect1">
            @foreach($users as $userId => $userName)
              @if($userId !== $task->user->id)
                <option value="{{ $userId }}" class="dropdown-item" href="/transfers">{{ $userName }}</option>
