@@ -19,11 +19,11 @@ class CreateTransfersTable extends Migration
             $table->unsignedBigInteger('senderId');
             $table->unsignedBigInteger('receiverId');
             $table->unsignedBigInteger('transferedTaskId');
-            $table->unsignedInteger('transferStatus');
+            $table->unsignedInteger('transferStatus')->default(0);
 
-            $table->foreign('senderId')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('receiverId')->references('id')->on('users')->onDelte('cascade');
-            $table->foreign('transferedTaskId')->references('id')->on('tasks')->onDelte('cascade');
+            $table->foreign('senderId')->references('id')->on('users');
+            $table->foreign('receiverId')->references('id')->on('users');
+            $table->foreign('transferedTaskId')->references('id')->on('tasks');
         });
     }
 

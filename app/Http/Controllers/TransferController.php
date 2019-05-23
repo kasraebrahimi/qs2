@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Task;
 use App\User;
+use App\Transfer;
 
 class TransferController extends Controller
 {
@@ -25,9 +26,22 @@ class TransferController extends Controller
       ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Transfer $transfer)
     {
-      dd($request->all());
-      
+      $transfer->create([
+        'senderId' => auth()->user()->id,
+        'receiverId' => $request->receiverId,
+        'transferedTaskId' => $request->transferedTaskId,
+      ]);
+
+      return redirect('/transfers');
+    }
+
+    public function index()
+    {
+      $transfers = auth()->user()->sender;
+      $transfers = auth()->user()->receiver;
+      dd($transfers);
+      return view('transfers.index');
     }
 }

@@ -41,4 +41,14 @@ class User extends Authenticatable
     {
       return $this->hasMany(Task::class);
     }
+
+    public function sentTransfers()
+    {
+      return $this->hasMany(Transfer::class, 'senderId', 'id');
+    }
+
+    public function receivedTransfers()
+    {
+      return $this->hasMany(Transfer::class, 'receiverId', 'id');
+    }
 }
