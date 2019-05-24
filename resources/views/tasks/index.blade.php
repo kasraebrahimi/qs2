@@ -51,6 +51,7 @@
                             </td>
 
                             <td>
+                                @if(!$task->transfer)
                                 <!-- Transfer Button -->
                                 <form action="/transfers" method="POST">
                                 {{ csrf_field() }}
@@ -69,7 +70,18 @@
                                       <i class="fa fa-btn fa-trash"></i>Delete
                                   </button>
                                 </form>
+                                @else
+                                <form class="d-inline" action="/transfers" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                  <input type="hidden" name="deleteTaskId" value="">
+                                  <button type="submit" class="btn btn-default float-right" style="margin-right: 6px;">
+                                      <i class="fa fa-btn fa-trash"></i>cancel
+                                  </button>
+                                </form>
+                                @endif
                             </td>
+
 
                         </tr>
                     @endforeach

@@ -97,6 +97,7 @@
                     {{ 'Rejected' }}
                   @endif
                 @else
+
                 <div class="btn-group">
                   <!-- reject button -->
                   <form class="d-inline" action="/rejected-transfers" method="POST">

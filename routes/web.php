@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('tasks', 'TaskController');
 
 Route::get('/transfers', 'TransferController@index');
-Route::post('/transfers', 'TransferController@continue');
+Route::post('/transfers', 'TransferController@index');
 Route::delete('/transfers', 'TransferController@destroy');
 
 Route::post('/accepted-transfers', 'TransferController@accept');

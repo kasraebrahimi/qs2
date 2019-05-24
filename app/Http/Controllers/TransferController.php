@@ -14,15 +14,10 @@ class TransferController extends Controller
       $this->middleware('auth');
     }
 
-    public function continue(Request $request)
-    {
-      return view('transfers.index');
-    }
-
     public function index(Request $request)
     {
-      $sentTransfers = auth()->user()->sentTransfers;
-      $receivedTransfers = auth()->user()->receivedTransfers;
+      $sentTransfers = auth()->user()->sentTransfers->sortBy('updated_at');
+      $receivedTransfers = auth()->user()->receivedTransfers->sortBy('updated_at');
       $tasks = auth()->user()->tasks->pluck('name', 'id')->all();
       $users = User::all()->pluck('name', 'id')->all();
 
