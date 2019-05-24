@@ -2,7 +2,7 @@
 
 @section('content')
   <!-- transfer task -->
-  <form method="POST" action="/transfers-create">
+  <form method="POST" action="/transfers">
   {{ csrf_field() }}
      <h4 class="col-lg-10">Transfering
        <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">

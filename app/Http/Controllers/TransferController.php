@@ -49,7 +49,7 @@ class TransferController extends Controller
       $transfer = $task->transfer;
       $transfer->delete();
 
-      return redirect('/transfers');
+      return back();
     }
 
     public function accept(Request $request)

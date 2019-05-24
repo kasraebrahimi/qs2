@@ -55,6 +55,7 @@
                                 <!-- Transfer Button -->
                                 <form action="/transfers" method="POST">
                                 {{ csrf_field() }}
+                                {{ method_field('PATCH') }}
                                   <input type="hidden" name="taskId" value="{{ $task->id }}">
                                   <input type="hidden" name="taskUserId" value="{{ $task->user_id }}">
                                   <button type="submit" class="btn btn-info float-right">
@@ -74,7 +75,7 @@
                                 <form class="d-inline" action="/transfers" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                  <input type="hidden" name="deleteTaskId" value="">
+                                  <input type="hidden" name="deleteTaskId" value="{{ $task->id }}">
                                   <button type="submit" class="btn btn-default float-right" style="margin-right: 6px;">
                                       <i class="fa fa-btn fa-trash"></i>cancel
                                   </button>
