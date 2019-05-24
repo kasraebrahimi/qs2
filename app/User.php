@@ -44,11 +44,11 @@ class User extends Authenticatable
 
     public function sentTransfers()
     {
-      return $this->hasMany(Transfer::class, 'senderId', 'id');
+      return $this->hasMany(Transfer::class, 'senderId');
     }
 
     public function receivedTransfers()
     {
-      return $this->hasMany(Transfer::class, 'receiverId', 'id');
+      return $this->hasMany(Transfer::class, 'receiverId');
     }
 }

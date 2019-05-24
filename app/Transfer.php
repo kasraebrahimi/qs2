@@ -14,11 +14,11 @@ class Transfer extends Model
 
     public function sender()
     {
-      // return $this->belongsTo(User::class, 'senderId', 'id');
+      return $this->belongsTo(User::class, 'senderId');
     }
 
     public function receiver()
     {
-      // return $this->belongsTo(User::class, 'receiverId', 'id');  Why first 'receiverId' and then 'id'; in User model it is vice versa;
+      return $this->belongsTo(User::class, 'receiverId');
     }
 }
