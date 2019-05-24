@@ -9,7 +9,7 @@ class Transfer extends Model
     protected $fillable = ['senderId', 'receiverId', 'transferedTaskId', 'transferStatus'];
     public function task()
     {
-      return $this->belongsTo(Task::class);
+      return $this->belongsTo(Task::class, 'transferedTaskId');
     }
 
     public function sender()

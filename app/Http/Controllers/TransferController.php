@@ -14,19 +14,30 @@ class TransferController extends Controller
       $this->middleware('auth');
     }
 
-    public function create(Task $task, User $user)
+    public function continue(Request $request)
     {
-      $users = User::all()->pluck('name', 'id')->all();
-      $tasks = auth()->user()->tasks->pluck('name', 'id')->all();
+      return view('transfers.index');
+    }
 
-      return view('transfers.create', [
-        'task' => $task,
+    public function index(Request $request)
+    {
+      $sentTransfers = auth()->user()->sentTransfers;
+      $receivedTransfers = auth()->user()->receivedTransfers;
+      $tasks = auth()->user()->tasks->pluck('name', 'id')->all();
+      $users = User::all()->pluck('name', 'id')->all();
+
+      return view('transfers.index', [
+        'sentTransfers' => $sentTransfers,
+        'receivedTransfers' => $receivedTransfers,
+        'defaultTaskId' => $request->taskId,
         'tasks' => $tasks,
         'users' => $users
       ]);
+
+
     }
 
-    public function store(Request $request, Transfer $transfer)
+    public function create(Request $request, Transfer $transfer)
     {
       $transfer->create([
         'senderId' => auth()->user()->id,
@@ -35,13 +46,5 @@ class TransferController extends Controller
       ]);
 
       return redirect('/transfers');
-    }
-
-    public function index()
-    {
-      $transfers = auth()->user()->sender;
-      $transfers = auth()->user()->receiver;
-      dd($transfers);
-      return view('transfers.index');
     }
 }
