@@ -51,9 +51,10 @@
                   @endif
                 @else
                   <!-- cancel button -->
-                  <form class="d-inline" action="" method="">
+                  <form class="d-inline" action="/transfers" method="POST">
                   {{ csrf_field() }}
-                  {{ method_field('') }}
+                  {{ method_field('DELETE') }}
+                    <input type="hidden" name="deleteTaskId" value="{{ $sentTransfer->task->id }}">
                     <button type="submit" class="btn btn-default float-right" style="margin-right: 6px;">
                         <i class="fa fa-btn fa-trash"></i>cancel
                     </button>

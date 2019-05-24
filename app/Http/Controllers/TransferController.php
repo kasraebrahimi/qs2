@@ -47,4 +47,13 @@ class TransferController extends Controller
 
       return redirect('/transfers');
     }
+
+    public function destroy(Request $request)
+    {
+      $task = \App\Task::find($request->deleteTaskId);
+      $transfer = $task->transfer;
+      $transfer->delete();
+
+      return redirect('/transfers');
+    }
 }

@@ -23,5 +23,4 @@ Route::resource('tasks', 'TaskController');
 
 Route::get('/transfers', 'TransferController@index');
 Route::post('/transfers', 'TransferController@continue');
-
-Route::post('/transfers-create', 'TransferController@create');
+Route::delete('/transfers', 'TransferController@destroy');

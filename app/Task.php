@@ -15,6 +15,6 @@ class Task extends Model
 
     public function transfer()
     {
-      return $this->hasOne(Transfer::class);
+      return $this->hasOne(Transfer::class, 'transferedTaskId');
     }
 }
