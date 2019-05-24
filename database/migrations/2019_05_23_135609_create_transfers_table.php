@@ -19,7 +19,7 @@ class CreateTransfersTable extends Migration
             $table->unsignedBigInteger('senderId');
             $table->unsignedBigInteger('receiverId');
             $table->unsignedBigInteger('transferedTaskId');
-            $table->unsignedInteger('transferStatus')->default(0);
+            $table->unsignedInteger('transferStatus')->default(0); // 0 for in transfer; 1 for accepted; 2 for rejected;
 
             $table->foreign('senderId')->references('id')->on('users');
             $table->foreign('receiverId')->references('id')->on('users');

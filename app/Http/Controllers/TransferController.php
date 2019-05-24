@@ -56,4 +56,22 @@ class TransferController extends Controller
 
       return redirect('/transfers');
     }
+
+    public function accept(Request $request)
+    {
+      $transfer = \App\Transfer::find($request->acceptedTransferId);
+      $transfer->transferStatus = 1;
+      $transfer->save();
+
+      return redirect('/transfers');
+    }
+
+    public function reject(Request $request)
+    {
+      $transfer = \App\Transfer::find($request->rejectedTransferId);
+      $transfer->transferStatus = 2;
+      $transfer->save();
+
+      return redirect('/transfers');
+    }
 }

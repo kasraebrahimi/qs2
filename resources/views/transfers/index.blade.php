@@ -18,7 +18,7 @@
            @endif
          @endforeach
        </select>
-       <button type="submit" class="btn btn-primary">Verify</button>
+       <button type="submit" class="btn btn-primary">verify</button>
      </h4>
   </form>
   <br><br>
@@ -32,7 +32,7 @@
               <th>Receiver</th>
               <th>Sent@</th>
               <th>Responded@</th>
-              <th>Status</th>
+              <th>Action</th>
           </thead>
           <!-- Table Body -->
           <tbody>
@@ -79,7 +79,7 @@
               <th>Sender</th>
               <th>Received@</th>
               <th>Responded@</th>
-              <th>Status</th>
+              <th>Action</th>
           </thead>
           <!-- Table Body -->
           <tbody>
@@ -97,22 +97,25 @@
                     {{ 'Rejected' }}
                   @endif
                 @else
+                <div class="btn-group">
                   <!-- reject button -->
-                  <form class="d-inline" action="" method="">
+                  <form class="d-inline" action="/rejected-transfers" method="POST">
                   {{ csrf_field() }}
-                  {{ method_field('') }}
-                    <button type="submit" class="btn btn-danger float-right">
+                    <input type="hidden" name="rejectedTransferId" value="{{ $receivedTransfer->id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fa fa-btn fa-trash"></i>&#10008;
                     </button>
                   </form>
+
                   <!-- accept button -->
-                  <form class="d-inline" action="" method="">
+                  <form class="d-inline" action="accepted-transfers" method="POST">
                   {{ csrf_field() }}
-                  {{ method_field('') }}
-                    <button type="submit" class="btn btn-success float-right" style="margin-right: 6px;">
+                    <input type="hidden" name="acceptedTransferId" value="{{ $receivedTransfer->id }}">
+                    <button type="submit" class="btn btn-success btn-sm" style="margin-left: 4px;">
                         <i class="fa fa-btn fa-trash"></i>&#10004;
                     </button>
                   </form>
+                </div>
                 @endif
               </td>
             </tr>
