@@ -1,29 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-  <!-- transfer task -->
-  <form method="POST" action="/transfers">
-  {{ csrf_field() }}
-     <h4 class="col-lg-10">Transfering
-       <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">
-         @foreach($tasks as $taskId => $taskName)
-             <option value="{{ $taskId }}" class="dropdown-item" {{ $taskId == $defaultTaskId ? "selected" : ""}}>{{ $taskName }}</option>
-         @endforeach
-       </select>
-       <span>to</span>
-       <select name="receiverId"class="form-control custom-select col-lg-3" id="exampleFormControlSelect1">
-         @foreach($users as $userId => $userName)
-           @if($userId !== auth()->user()->id)
-             <option value="{{ $userId }}" class="dropdown-item" href="/transfers">{{ $userName }}</option>
-           @endif
-         @endforeach
-       </select>
-       <button type="submit" class="btn btn-primary">verify</button>
-     </h4>
-  </form>
+<!-- transfer task -->
+  <div class="text-center">
+    <form method="POST" action="/transfers">
+    {{ csrf_field() }}
+       <h4 class="col-lg-10">transfering
+         <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">
+           @foreach($tasks as $task)
+              @if(!$task->transfer)
+               <option value="{{ $task->id }}" class="dropdown-item" {{ $task->id == $defaultTaskId ? "selected" : ""}}>{{ $task->name }}</option>
+              @endif
+           @endforeach
+         </select>
+         to
+         <select name="receiverId"class="form-control custom-select col-lg-3" id="exampleFormControlSelect1">
+           @foreach($users as $userId => $userName)
+             @if($userId !== auth()->user()->id)
+               <option value="{{ $userId }}" class="dropdown-item" href="/transfers">{{ $userName }}</option>
+             @endif
+           @endforeach
+         </select>
+         <button type="submit" class="btn btn-primary" style="border-color: snow;"><strong>verify</strong></button>
+       </h4>
+    </form>
+  </div>
   <br><br>
   <!-- Outgoing tasks -->
-  <h3>Outgoing tasks</h3>
+  @if(in_array(auth()->user()->id, $sentTransfers->map->senderId->all()))
+  <h3>&nbsp;&nbsp;&nbsp;Outgoing tasks</h3>
   <div class="panel-body col-lg-10">
       <table class="table table-striped task-table">
           <!-- Table Headings -->
@@ -66,11 +71,14 @@
           </tbody>
       </table>
   </div>
+  @else
+  <h4>there is no outgoing request!</h4>
+  @endif
 
   <br>
 
   <!-- incoming tasks -->
-  <h3>Incoming tasks</h3>
+  <h3>&nbsp;&nbsp;&nbsp;Incoming tasks</h3>
   <div class="panel-body col-lg-10">
       <table class="table table-striped task-table">
           <!-- Table Headings -->

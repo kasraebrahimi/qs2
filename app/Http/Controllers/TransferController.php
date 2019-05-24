@@ -18,7 +18,7 @@ class TransferController extends Controller
     {
       $sentTransfers = auth()->user()->sentTransfers->sortBy('updated_at');
       $receivedTransfers = auth()->user()->receivedTransfers->sortBy('updated_at');
-      $tasks = auth()->user()->tasks->pluck('name', 'id')->all();
+      $tasks = auth()->user()->tasks;
       $users = User::all()->pluck('name', 'id')->all();
 
       return view('transfers.index', [
