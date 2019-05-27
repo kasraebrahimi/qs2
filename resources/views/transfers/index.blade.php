@@ -73,12 +73,13 @@
       </table>
   </div>
   @else
-  <h4>there is no outgoing request!</h4>
+  <h4>no outgoing requests!</h4>
   @endif
 
   <br>
 
   <!-- incoming tasks -->
+  @if(in_array(auth()->user()->id, $receivedTransfers->map->receiverId->all()))
   <h3>&nbsp;&nbsp;&nbsp;Incoming tasks</h3>
   <div class="panel-body col-lg-10">
       <table class="table table-striped task-table">
@@ -133,5 +134,8 @@
           </tbody>
       </table>
   </div>
+  @else
+  <h4>no incoming requests!</h4>
+  @endif
 
 @endsection
