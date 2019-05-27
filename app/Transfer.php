@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transfer extends Model
 {
     protected $fillable = ['senderId', 'receiverId', 'transferedTaskId', 'transferStatus'];
+
     public function task()
     {
       return $this->belongsTo(Task::class, 'transferedTaskId');

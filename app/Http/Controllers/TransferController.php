@@ -32,8 +32,27 @@ class TransferController extends Controller
 
     }
 
-    public function create(Request $request, Transfer $transfer)
+    public function create(Request $request,Transfer $transfer)
     {
+      $this->validate($request, [
+        'receiverId' => ['required', 'integer', 'min: 1'],
+        'transferedTaskId' => ['required', 'integer', 'min: 1']
+      ]);
+
+      // Authorizations:
+      // 1. a user CANNOT send a task to HIMSELF. [OK]
+      abort_if(\Gate::allows('transfer-to-self', $request), 403);
+
+      // 2. a user CANNOT send a task to a NON-EXISTANT USER. [OK]
+      abort_if(User::find($request->receiverId) === null, 403);
+
+      $task = Task::find($request->transferedTaskId);
+      // 3. a user CANNOT send a task that is NOT HIS. [OK]
+      abort_if($task->user->id !== auth()->user()->id, 403);
+
+      // 4. NO DUPLICATE TRANSFERS. [OK]
+      abort_if(($task->transfer && $task->transfer->transferStatus === 0), 403);
+
       $transfer->create([
         'senderId' => auth()->user()->id,
         'receiverId' => $request->receiverId,
@@ -45,8 +64,10 @@ class TransferController extends Controller
 
     public function destroy(Request $request)
     {
-      $task = \App\Task::find($request->deleteTaskId);
+      $task = Task::find($request->deleteTaskId);
       $transfer = $task->transfer;
+
+      $this->authorize('access', $transfer);
       $transfer->delete();
 
       return back();
@@ -55,7 +76,7 @@ class TransferController extends Controller
     public function accept(Request $request)
     {
       $transfer = \App\Transfer::find($request->acceptedTransferId);
-      $transfer->transferStatus = 1;
+      $transfer->transferStatus = 1; // transferStatus is not fillable.
       $transfer->save();
 
       return redirect('/transfers');
@@ -64,7 +85,7 @@ class TransferController extends Controller
     public function reject(Request $request)
     {
       $transfer = \App\Transfer::find($request->rejectedTransferId);
-      $transfer->transferStatus = 2;
+      $transfer->transferStatus = 2; // transferStatus is not fillable.
       $transfer->save();
 
       return redirect('/transfers');

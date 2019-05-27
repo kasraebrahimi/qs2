@@ -5,7 +5,7 @@
   <div class="text-center">
     <form method="POST" action="/transfers">
     {{ csrf_field() }}
-       <h4 class="col-lg-10">transfering
+       <h4 class="col-lg-10">transfering &nbsp;
          <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">
            @foreach($tasks as $task)
               @if(!$task->transfer)
@@ -13,7 +13,7 @@
               @endif
            @endforeach
          </select>
-         to
+         &nbsp; to &nbsp;
          <select name="receiverId"class="form-control custom-select col-lg-3" id="exampleFormControlSelect1">
            @foreach($users as $userId => $userName)
              @if($userId !== auth()->user()->id)
@@ -21,7 +21,8 @@
              @endif
            @endforeach
          </select>
-         <button type="submit" class="btn btn-primary" style="border-color: snow;"><strong>verify</strong></button>
+         &nbsp;&nbsp;
+         <button type="submit" class="btn btn-success" style="border-color: snow;"><strong>verify</strong></button>
        </h4>
     </form>
   </div>

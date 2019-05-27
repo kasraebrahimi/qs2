@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Task' => 'App\Policies\TaskPolicy',
+        'App\Transfer' => 'App\Policies\TransferPolicy',
     ];
 
     /**
@@ -25,6 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('transfer-to-self', function ($user, $request) {
+        return $user->id == $request->receiverId;
+      });
     }
 }

@@ -58,7 +58,7 @@
                                 {{ method_field('PATCH') }}
                                   <input type="hidden" name="taskId" value="{{ $task->id }}">
                                   <input type="hidden" name="taskUserId" value="{{ $task->user_id }}">
-                                  <button type="submit" class="btn btn-info float-right">
+                                  <button type="submit" class="btn btn-info float-right" style="color: azure;">
                                       <i class="fa fa-btn fa-trash"></i>Transfer
                                   </button>
                                 </form>

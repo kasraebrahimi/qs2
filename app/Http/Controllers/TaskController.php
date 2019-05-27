@@ -40,6 +40,10 @@ class TaskController extends Controller
     public function destroy(Request $request, Task $task)
     {
       $this->authorize('destroy', $task);
+
+      // when a task is IN TRANSFER it CANNOT BE DELETED.
+      abort_if($task->transfer, 403);
+
       $task->delete();
 
       return redirect('/tasks');
@@ -47,7 +51,7 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-      
+
     }
 
 }
