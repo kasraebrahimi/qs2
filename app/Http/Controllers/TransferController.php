@@ -73,9 +73,8 @@ class TransferController extends Controller
       return back();
     }
 
-    public function accept(Request $request)
+    public function accept(Request $request, Transfer $transfer)
     {
-      $transfer = \App\Transfer::find($request->acceptedTransferId);
       $transfer->transferStatus = 1; // transferStatus is not fillable.
 
       $task = $transfer->task;

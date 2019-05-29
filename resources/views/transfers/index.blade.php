@@ -8,7 +8,7 @@
        <h4 class="col-lg-10">transfering &nbsp;
          <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">
            @foreach($tasks as $task)
-              @if(!$task->transfer)
+              @if(!$task->transfer || $task->transfer->transferStatus !== 0 )
                <option value="{{ $task->id }}" class="dropdown-item" {{ $task->id == $defaultTaskId ? "selected" : ""}}>{{ $task->name }}</option>
               @endif
            @endforeach
@@ -110,18 +110,16 @@
 
                 <div class="btn-group">
                   <!-- reject button -->
-                  <form class="d-inline" action="/rejected-transfers" method="POST">
+                  <form class="d-inline" action="/transfers/reject/{{ $receivedTransfer->id }}" method="POST">
                   {{ csrf_field() }}
-                    <input type="hidden" name="rejectedTransferId" value="{{ $receivedTransfer->id }}">
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fa fa-btn fa-trash"></i>&#10008;
                     </button>
                   </form>
 
                   <!-- accept button -->
-                  <form class="d-inline" action="accepted-transfers" method="POST">
+                  <form class="d-inline" action="/transfers/accept/{{ $receivedTransfer->id }}" method="POST">
                   {{ csrf_field() }}
-                    <input type="hidden" name="acceptedTransferId" value="{{ $receivedTransfer->id }}">
                     <button type="submit" class="btn btn-success btn-sm" style="margin-left: 4px;">
                         <i class="fa fa-btn fa-trash"></i>&#10004;
                     </button>
