@@ -77,6 +77,11 @@ class TransferController extends Controller
     {
       $transfer = \App\Transfer::find($request->acceptedTransferId);
       $transfer->transferStatus = 1; // transferStatus is not fillable.
+
+      $task = $transfer->task;
+      $task->user_id = $transfer->receiverId;
+      $task->save();
+
       $transfer->save();
 
       return redirect('/transfers');
