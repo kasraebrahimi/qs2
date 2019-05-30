@@ -51,12 +51,12 @@ class TransferController extends Controller
       abort_if($task->user->id !== auth()->user()->id, 403);
 
       // 4. NO DUPLICATE TRANSFERS. [OK]
-      abort_if(($task->transfer && $task->transfer->transferStatus === 0), 403);
 
       $transfer->create([
         'senderId' => auth()->user()->id,
         'receiverId' => $request->receiverId,
         'transferedTaskId' => $request->transferedTaskId,
+        'transferStatus' => 0
       ]);
 
       return redirect('/transfers');
@@ -65,9 +65,9 @@ class TransferController extends Controller
     public function destroy(Request $request)
     {
       $task = Task::find($request->deleteTaskId);
-      $transfer = $task->transfer;
+      $transfer = $task->transfers->last();
 
-      $this->authorize('access', $transfer);
+      $this->authorize('cancel', $transfer);
       $transfer->delete();
 
       return back();
@@ -75,7 +75,9 @@ class TransferController extends Controller
 
     public function accept(Request $request, Transfer $transfer)
     {
-      $transfer->transferStatus = 1; // transferStatus is not fillable.
+      $this->authorize('respond', $transfer);
+
+      $transfer->transferStatus = 1;
 
       $task = $transfer->task;
       $task->user_id = $transfer->receiverId;
@@ -86,10 +88,10 @@ class TransferController extends Controller
       return redirect('/transfers');
     }
 
-    public function reject(Request $request)
+    public function reject(Request $request, Transfer $transfer)
     {
-      $transfer = \App\Transfer::find($request->rejectedTransferId);
-      $transfer->transferStatus = 2; // transferStatus is not fillable.
+      $this->authorize('respond', $transfer);
+      $transfer->transferStatus = 2;
       $transfer->save();
 
       return redirect('/transfers');

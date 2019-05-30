@@ -42,7 +42,6 @@ class TaskController extends Controller
       $this->authorize('destroy', $task);
 
       // when a task is IN TRANSFER it CANNOT BE DELETED.
-      abort_if($task->transfer, 403);
 
       $task->delete();
 

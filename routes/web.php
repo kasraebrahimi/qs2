@@ -27,4 +27,4 @@ Route::post('/transfers', 'TransferController@create');
 Route::delete('/transfers', 'TransferController@destroy');
 
 Route::post('/transfers/accept/{transfer}', 'TransferController@accept');
-Route::post('/rejected-transfers', 'TransferController@reject');
+Route::delete('/transfers/reject/{transfer}', 'TransferController@reject');

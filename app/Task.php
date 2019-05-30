@@ -13,8 +13,8 @@ class Task extends Model
       return $this->belongsTo(User::class);
     }
 
-    public function transfer()
+    public function transfers()
     {
-      return $this->hasOne(Transfer::class, 'transferedTaskId');
+      return $this->hasMany(Transfer::class, 'transferedTaskId');
     }
 }

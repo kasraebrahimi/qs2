@@ -51,7 +51,7 @@
                             </td>
 
                             <td>
-                                @if(!$task->transfer || $task->transfer->transferStatus !== 0)
+                                @if(! $task->transfers->count() || $task->transfers->last()->transferStatus !== 0)
                                 <!-- Transfer Button -->
                                 <form action="/transfers" method="POST">
                                 {{ csrf_field() }}

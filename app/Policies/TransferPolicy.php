@@ -16,13 +16,14 @@ class TransferPolicy
      * @param  \App\Transfer  $transfer
      * @return mixed
      */
-    public function access(User $user, Transfer $transfer)
+    public function cancel(User $user, Transfer $transfer)
     {
-        return $user->id == $transfer->senderId;
+        return $user->id == $transfer->senderId && $transfer->transferStatus == 0;
     }
 
-    public function create(User $user, Task $task)
+    public function respond(User $user, Transfer $transfer)
     {
-      return $user->id == $task->user->id;
+      return $user->id == $transfer->receiverId && $transfer->transferStatus == 0;
     }
+
 }
