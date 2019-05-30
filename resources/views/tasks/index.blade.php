@@ -31,7 +31,7 @@
         <div class="panel-heading">
             Current Tasks
         </div>
-
+        <br>
         <div class="panel-body col-lg-10">
             <table class="table table-striped task-table">
 
@@ -53,21 +53,13 @@
                             <td>
                                 @if(! $task->transfers->count() || $task->transfers->last()->transferStatus !== 0)
                                 <!-- Transfer Button -->
-                                <form action="/transfers" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('PATCH') }}
-                                  <input type="hidden" name="taskId" value="{{ $task->id }}">
-                                  <input type="hidden" name="taskUserId" value="{{ $task->user_id }}">
-                                  <button type="submit" class="btn btn-info float-right" style="color: azure;">
-                                      <i class="fa fa-btn fa-trash"></i>Transfer
-                                  </button>
-                                </form>
+                                  <a class="btn btn-secondary float-right d-inline" href="/transfers?task_id={{ $task->id }}">Transfer</a>
                                 <!-- Delete Button -->
                                 <form action="{{ url('tasks/'.$task->id) }}" method="POST">
                                 {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                                {{ method_field('PATCH') }}
 
-                                  <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger float-right" style="margin-right: 6px;">
+                                <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger d-inline float-right" style="margin-right: 6px;">
                                       <i class="fa fa-btn fa-trash"></i>Delete
                                   </button>
                                 </form>

@@ -20,8 +20,6 @@ class TransferController extends Controller
       $receivedTransfers = auth()->user()->receivedTransfers->sortBy('updated_at');
       $tasks = auth()->user()->tasks;
       $users = User::all()->where('id', '!==', auth()->user()->id)->pluck('name', 'id')->all();
-      $hasIncoming = in_array(auth()->user()->id, $receivedTransfers->map->receiverId->all());
-      $hasOutgoing = in_array(auth()->user()->id, $sentTransfers->map->senderId->all());
 
       return view('transfers.index', [
         'sentTransfers' => $sentTransfers,
@@ -29,33 +27,19 @@ class TransferController extends Controller
         'defaultTaskId' => $request->taskId,
         'tasks' => $tasks,
         'users' => $users,
-        'hasOutgoing' => $hasOutgoing,
-        'hasIncoming' => $hasIncoming
       ]);
 
 
     }
 
-    public function create(Request $request,Transfer $transfer)
+    public function create(Request $request, Transfer $transfer)
     {
       $this->validate($request, [
         'receiverId' => ['required', 'integer', 'min: 1'],
         'transferedTaskId' => ['required', 'integer', 'min: 1']
       ]);
 
-      // Authorizations:
-      // 1. a user CANNOT send a task to HIMSELF. [OK]
-      abort_if(\Gate::allows('transfer-to-self', $request), 403);
-
-      // 2. a user CANNOT send a task to a NON-EXISTANT USER. [OK]
-      abort_if(User::findOrFail($request->receiverId) === null, 403);
-
-      $task = Task::findOrFail($request->transferedTaskId);
-      // 3. a user CANNOT send a task that is NOT HIS. [OK]
-      abort_if($task->user->id !== auth()->user()->id, 403);
-
-      // 4. NO DUPLICATE TRANSFERS.
-      abort_if(Transfer::where('senderId', $task->user->id)->where('transferedTaskId', $request->transferedTaskId)->count(), 403);
+      $this->authorizeCreateTransfer($request);
 
       $transfer->create([
         'senderId' => auth()->user()->id,
@@ -97,5 +81,24 @@ class TransferController extends Controller
       $transfer->save();
 
       return redirect('/transfers');
+    }
+
+    protected function authorizeCreateTransfer(Request $request)
+    {
+      // Authorizations:
+      // 1. a user CANNOT send a task to HIMSELF.
+      $restriction1 = \Gate::allows('transfer-to-self', $request);
+
+      // 2. a user CANNOT send a task to a NON-EXISTANT USER.
+      $restriction2 = User::findOrFail($request->receiverId) === null;
+
+      $task = Task::findOrFail($request->transferedTaskId);
+      // 3. a user CANNOT send a task that is NOT HIS.
+      $restriction3 = $task->user->id !== auth()->user()->id;
+
+      // 4. NO DUPLICATE TRANSFERS.
+      $restriction4 = Transfer::where('senderId', $task->user->id)->where('transferedTaskId', $request->transferedTaskId)->count();
+
+      return !($restriction1 || $restriction2 || $restriction3 || $restriction4);
     }
 }

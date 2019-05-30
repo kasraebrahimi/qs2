@@ -20,7 +20,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
       return view('tasks.index', [
-        'tasks' => $this->tasks->forUser($request->user())
+        'tasks' => $this->tasks->forUser($request->user())->where('status', 0)
       ]);
     }
 
@@ -37,13 +37,12 @@ class TaskController extends Controller
       return redirect('/tasks');
     }
 
-    public function destroy(Request $request, Task $task)
+    public function archive(Request $request, Task $task)
     {
       $this->authorize('destroy', $task);
 
-      // when a task is IN TRANSFER it CANNOT BE DELETED.
-
-      $task->delete();
+      $task->status = 1;
+      $task->save();
 
       return redirect('/tasks');
     }

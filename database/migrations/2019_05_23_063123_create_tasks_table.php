@@ -17,6 +17,7 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('name');
+            $table->unsignedInteger('status')->default(0); // 1 for deleted(archived)
             $table->unsignedBigInteger('user_id');
         });
     }

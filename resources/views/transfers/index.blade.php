@@ -1,21 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if (request()->has('task_id'))
+<script type="text/javascript">
+   function formfocus() {
+     document.getElementById('user').focus();
+   }
+   window.onload = formfocus;
+ </script>
+ @endif
+
 <!-- transfer task -->
   <div class="text-center">
     <form method="POST" action="/transfers">
     {{ csrf_field() }}
        <h4 class="col-lg-10">transfering &nbsp;
-         <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="exampleFormControlSelect1" name="">
+         <select name="transferedTaskId" class="form-control custom-select col-lg-3" id="task">
                <option class="placeholder" selected disabled>--select task--</option>
            @foreach($tasks as $task)
               @if(! $task->transfers->count() || $task->transfers->last()->transferStatus !== 0)
-               <option value="{{ $task->id }}" class="dropdown-item" {{ $task->id == $defaultTaskId ? "selected" : ""}}>{{ $task->name }}</option>
+               <option value="{{ $task->id }}" class="dropdown-item" {{ $task->id == request()->task_id ? "selected" : ""}}>{{ $task->name }}</option>
               @endif
            @endforeach
          </select>
          &nbsp; to &nbsp;
-         <select name="receiverId"class="form-control custom-select col-lg-3" id="exampleFormControlSelect1">
+         <select name="receiverId"class="form-control custom-select col-lg-3" id="user">
                <option class="placeholder" selected disabled>--select user--</option>
            @foreach($users as $userId => $userName)
                <option value="{{ $userId }}" class="dropdown-item" href="/transfers">{{ $userName }}</option>
@@ -28,7 +38,7 @@
   </div>
   <br><br>
   <!-- Outgoing tasks -->
-  @if($hasOutgoing)
+  @if($sentTransfers->count())
   <h3>&nbsp;&nbsp;&nbsp;Outgoing tasks</h3>
   <div class="panel-body col-lg-10">
       <table class="table table-striped task-table">
@@ -78,7 +88,7 @@
   <br>
 
   <!-- incoming tasks -->
-  @if($hasIncoming)
+  @if($receivedTransfers->count())
   <h3>&nbsp;&nbsp;&nbsp;Incoming tasks</h3>
   <div class="panel-body col-lg-10">
       <table class="table table-striped task-table">
@@ -111,7 +121,7 @@
                   <!-- reject button -->
                   <form class="d-inline" action="/transfers/reject/{{ $receivedTransfer->id }}" method="POST">
                   {{ csrf_field() }}
-                  {{ method_field('DELETE') }}
+                  {{ method_field('PATCH') }}
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fa fa-btn fa-trash"></i>&#10008;
                     </button>
@@ -120,6 +130,7 @@
                   <!-- accept button -->
                   <form class="d-inline" action="/transfers/accept/{{ $receivedTransfer->id }}" method="POST">
                   {{ csrf_field() }}
+                  {{ method_field('PATCH') }}
                     <button type="submit" class="btn btn-success btn-sm" style="margin-left: 4px;">
                         <i class="fa fa-btn fa-trash"></i>&#10004;
                     </button>
