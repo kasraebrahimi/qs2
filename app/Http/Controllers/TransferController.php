@@ -19,14 +19,18 @@ class TransferController extends Controller
       $sentTransfers = auth()->user()->sentTransfers->sortBy('updated_at');
       $receivedTransfers = auth()->user()->receivedTransfers->sortBy('updated_at');
       $tasks = auth()->user()->tasks;
-      $users = User::all()->pluck('name', 'id')->all();
+      $users = User::all()->where('id', '!==', auth()->user()->id)->pluck('name', 'id')->all();
+      $hasIncoming = in_array(auth()->user()->id, $receivedTransfers->map->receiverId->all());
+      $hasOutgoing = in_array(auth()->user()->id, $sentTransfers->map->senderId->all());
 
       return view('transfers.index', [
         'sentTransfers' => $sentTransfers,
         'receivedTransfers' => $receivedTransfers,
         'defaultTaskId' => $request->taskId,
         'tasks' => $tasks,
-        'users' => $users
+        'users' => $users,
+        'hasOutgoing' => $hasOutgoing,
+        'hasIncoming' => $hasIncoming
       ]);
 
 
@@ -44,13 +48,14 @@ class TransferController extends Controller
       abort_if(\Gate::allows('transfer-to-self', $request), 403);
 
       // 2. a user CANNOT send a task to a NON-EXISTANT USER. [OK]
-      abort_if(User::find($request->receiverId) === null, 403);
+      abort_if(User::findOrFail($request->receiverId) === null, 403);
 
-      $task = Task::find($request->transferedTaskId);
+      $task = Task::findOrFail($request->transferedTaskId);
       // 3. a user CANNOT send a task that is NOT HIS. [OK]
       abort_if($task->user->id !== auth()->user()->id, 403);
 
-      // 4. NO DUPLICATE TRANSFERS. [OK]
+      // 4. NO DUPLICATE TRANSFERS.
+      abort_if(Transfer::where('senderId', $task->user->id)->where('transferedTaskId', $request->transferedTaskId)->count(), 403);
 
       $transfer->create([
         'senderId' => auth()->user()->id,
@@ -62,11 +67,8 @@ class TransferController extends Controller
       return redirect('/transfers');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, Transfer $transfer)
     {
-      $task = Task::find($request->deleteTaskId);
-      $transfer = $task->transfers->last();
-
       $this->authorize('cancel', $transfer);
       $transfer->delete();
 

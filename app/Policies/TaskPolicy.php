@@ -22,6 +22,12 @@ class TaskPolicy
 
     public function destroy(User $user, Task $task)
     {
-      return $task->user_id === $user->id;
+      $condition1 = $task->user_id === $user->id;
+      $condition2 = true;
+      if ($task->transfers->last() !== null) {
+        $condition2 = $task->transfers->last()->transferStatus !== 0;
+      }
+
+      return $condition1 && $condition2;
     }
 }

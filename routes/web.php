@@ -19,12 +19,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('tasks', 'TaskController');
+Route::get('/tasks', 'TaskController@index');
+Route::post('/tasks', 'TaskController@store');
+Route::delete('/tasks/{task}', 'TaskController@destroy');
 
 Route::get('/transfers', 'TransferController@index');
 Route::patch('/transfers', 'TransferController@index');
 Route::post('/transfers', 'TransferController@create');
-Route::delete('/transfers', 'TransferController@destroy');
+Route::delete('/transfers/{transfer}', 'TransferController@destroy');
 
 Route::post('/transfers/accept/{transfer}', 'TransferController@accept');
 Route::delete('/transfers/reject/{transfer}', 'TransferController@reject');

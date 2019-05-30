@@ -48,9 +48,4 @@ class TaskController extends Controller
       return redirect('/tasks');
     }
 
-    public function show(Task $task)
-    {
-
-    }
-
 }

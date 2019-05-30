@@ -72,10 +72,9 @@
                                   </button>
                                 </form>
                                 @else
-                                <form class="d-inline" action="/transfers" method="POST">
+                                <form class="d-inline" action="/transfers/{{ $task->transfers->last()->id }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                  <input type="hidden" name="deleteTaskId" value="{{ $task->id }}">
                                   <button type="submit" class="btn btn-default float-right" style="margin-right: 6px;">
                                       <i class="fa fa-btn fa-trash"></i>cancel
                                   </button>
