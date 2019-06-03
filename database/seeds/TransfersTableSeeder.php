@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Transfer;
 
-class TaskTableSeeder extends Seeder
+class TransfersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +12,6 @@ class TaskTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(Transfer::class, 10)->create();
     }
 }
